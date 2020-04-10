@@ -1,0 +1,131 @@
+-- Adding a row to the vc_Status table
+INSERT INTO vc_Status 
+	(StatusText)
+VALUES ('Scheduled')
+
+-- Select from vc_Status
+SELECT * FROM vc_Status
+
+-- Insert more values into vc_Status
+INSERT INTO vc_Status 
+	(StatusText)
+	VALUES ('Started'), ('Finished'), ('On time')
+
+-- Select from vc_User and vc_Status
+SELECT * FROM vc_User 
+	WHERE UserName = 'SaulHudson'
+SELECT * FROM vc_Status
+	WHERE StatusText = 'Finished'
+
+-- Add to vc_VidCast
+INSERT INTO vc_VidCast
+	(VidCastTitle, StartDateTime, EndDateTime, ScheduleDurationMinutes, RecordingURL, vc_UserID, vc_StatusID)
+VALUES
+	('December Snow', '3/1/2018 14:00', '3/1/2018 14:30', 30, '/XVF1234', 2, 3)
+
+-- Select all from vc_VidCast
+SELECT * FROM vc_VidCast
+
+-- Select videos from Saul Hudson
+SELECT
+	vc_User.UserName,
+	vc_User.EmailAddress,
+	vc_VidCast.VidCastTitle,
+	vc_VidCast.StartDateTime,
+	vc_VidCast.EndDateTime,
+	vc_VidCast.ScheduleDurationMinutes / 60.0 as ScheduledHours,
+	vc_Status.StatusText
+	FROM vc_VidCast
+JOIN vc_User 
+	ON vc_VidCast.vc_UserID = vc_User.vc_UserID
+JOIN vc_Status 
+	ON vc_VidCast.vc_StatusID = vc_Status.vc_StatusID
+WHERE
+	vc_User.UserName = 'SaulHudson'
+ORDER BY
+	vc_VidCast.StartDateTime
+--- End
+
+-- Correcting a User's UserRegisteredDate
+UPDATE vc_User
+	SET UserRegisteredDate = '3/1/2018' 
+WHERE
+	UserName = 'SaulHudson'
+-- End
+
+-- Select from vc_User to show update
+SELECT * 
+FROM vc_User
+	WHERE UserName = 'SaulHudson'
+
+-- See what rows we have in status
+SELECT *
+	FROM vc_Status
+
+-- Delete the On Time Status
+DELETE vc_Status
+	WHERE StatusText = 'On time'
+
+-- See Effects
+SELECT *
+	FROM vc_Status
+
+-- Add to vc_Tag table
+INSERT INTO vc_Tag
+	(TagText, TagDescription)
+	VALUES
+	('Personal', 'About People'),
+	('Professional', 'Business, business, business'),
+	('Sports', 'All manners of sports'),
+	('Music', 'Music analysis, news, and thoughts'),
+	('Games', 'Live streaming our favorite games')
+-- End statement
+
+-- Select all values in vc_Tag
+SELECT * FROM vc_Tag
+
+-- Add values to vc_User table
+INSERT INTO vc_User
+	(UserName, EmailAddress, UserDescription)
+	VALUES
+	('TheDoctor', 'tomBaker@nodomain.xyz', 'The definite article'),
+	('HairCut', 'S.todd@nodomain.xyz', 'Fleet Street barber shop'),
+	('DnDGal', 'dnd@nodomain.xyz', NULL)
+-- End Insert
+
+-- Select all values in vc_User
+SELECT * FROM vc_User
+
+-- Add User Tags to UserTagList
+INSERT INTO vc_UserTagList 
+	(vc_UserID, vc_TagID) 
+	VALUES 
+	((SELECT vc_UserID FROM vc_User WHERE UserName='DnDGal'), (SELECT vc_TagID FROM vc_Tag WHERE TagText='Sports')), 
+	((SELECT vc_UserID FROM vc_User WHERE UserName='DnDGal'), (SELECT vc_TagID FROM vc_Tag WHERE TagText='Professional')), 
+	((SELECT vc_UserID FROM vc_User WHERE UserName='RDwight'), (SELECT vc_TagID FROM vc_Tag WHERE TagText='Professional')), 
+	((SELECT vc_UserID FROM vc_User WHERE UserName='SaulHudson'), (SELECT vc_TagID FROM vc_Tag WHERE TagText='Sports')), 
+	((SELECT vc_UserID FROM vc_User WHERE UserName='Gordon'), (SELECT vc_TagID FROM vc_Tag WHERE TagText='Personal')), 
+	((SELECT vc_UserID FROM vc_User WHERE UserName='DnDGal'), (SELECT vc_TagID FROM vc_Tag WHERE TagText='Personal')), 
+	((SELECT vc_UserID FROM vc_User WHERE UserName='Gordon'), (SELECT vc_TagID FROM vc_Tag WHERE TagText='Games')), 
+	((SELECT vc_UserID FROM vc_User WHERE UserName='HairCut'), (SELECT vc_TagID FROM vc_Tag WHERE TagText='Professional')), 
+	((SELECT vc_UserID FROM vc_User WHERE UserName='TheDoctor'), (SELECT vc_TagID FROM vc_Tag WHERE TagText='Music')), 
+	((SELECT vc_UserID FROM vc_User WHERE UserName='DnDGal'), (SELECT vc_TagID FROM vc_Tag WHERE TagText='Games')), 
+	((SELECT vc_UserID FROM vc_User WHERE UserName='SaulHudson'), (SELECT vc_TagID FROM vc_Tag WHERE TagText='Games')), 
+	((SELECT vc_UserID FROM vc_User WHERE UserName='Gordon'), (SELECT vc_TagID FROM vc_Tag WHERE TagText='Professional')), 
+	((SELECT vc_UserID FROM vc_User WHERE UserName='HairCut'), (SELECT vc_TagID FROM vc_Tag WHERE TagText='Music')), 
+	((SELECT vc_UserID FROM vc_User WHERE UserName='TheDoctor'), (SELECT vc_TagID FROM vc_Tag WHERE TagText='Personal'))
+-- End Insert
+
+-- Get all the user tags in the table
+SELECT * FROM vc_UserTagList
+
+-- Select user tags with usernames from other table
+SELECT 
+	vc_User.UserName,
+	vc_User.EmailAddress,
+	vc_Tag.TagText
+	FROM vc_User
+
+	JOIN vc_UserTagList on vc_User.vc_UserID = vc_UserTagList.vc_UserID
+	JOIN vc_Tag ON vc_Tag.vc_TagID = vc_UserTagList.vc_TagID
+-- End Select

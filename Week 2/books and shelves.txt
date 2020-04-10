@@ -1,0 +1,14 @@
+Entities
+-Authors 
+-Books
+-Bookshelf
+
+Bookshelves can hold 0 to many books.
+A book must be on a book shelf.
+Each book must have a title and ISBN number.
+Bookshelves might have dimensions - length, depth and height.
+Books may have dimensions height, width and depth so that it can be determined if they fit on a shelf.
+
+Books can have 1 to many editions or copies.
+Authors - many to many for books
+

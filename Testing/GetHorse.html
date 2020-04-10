@@ -1,0 +1,36 @@
+@{
+    var barnname = "";
+    var showname = "";
+    var foaldate = "";
+
+    if(IsPost) {
+        barnname = Request.Form["barnname"];
+        
+        var db = DatabaseOpen("IST659_JLWOZNIC_PROJ");
+        var SQLCommand = "SELECT * FROM Horse WHERE Horse.BarnName = @1";
+        db.Execute(SQLCommand, barnname);
+        Response.Redirect("~/Testing");
+    }
+}
+
+<!DOCTYPE html>
+<html>
+<head>
+<img src="WHLogo.jpg">
+<meta charset="utf-8" />
+<title>Woznica Horse Records</title>
+</head>
+<body>
+  <h1>Lookup a Horse</h1>
+  <form method="post">
+    <fieldset>
+      <legend>Horse Information</legend>
+      <p><label for="barnname">Barn Name:</label>
+         <input type="text" name="barnname" value="@Request.Form["barnname"]" />
+      </p>
+
+      <p><input type="submit" name="buttonSubmit" value="Find Horse" /></p>
+    </fieldset>
+  </form>
+</body>
+</html>
